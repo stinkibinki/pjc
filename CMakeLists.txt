@@ -15,4 +15,6 @@ add_executable(untitled
         src/04_bitki.c
         src/04_wc.c
         src/05_tocke.c
-        src/05_histogram.c)
+        src/05_histogram.c
+        src/06_sklad.c
+        src/06_testSklada.c)
