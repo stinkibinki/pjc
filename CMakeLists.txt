@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 4.0)
-project(untitled C)
+project(code C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(untitled
+add_executable(code
         main.c
         src/01_izpis.c
         src/01_fibo.c
