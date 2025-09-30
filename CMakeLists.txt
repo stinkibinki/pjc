@@ -17,4 +17,5 @@ add_executable(code
         src/05_tocke.c
         src/05_histogram.c
         src/06_sklad.c
-        src/06_testSklada.c)
+        src/06_testSklada.c
+        src/07_imenik.c)
