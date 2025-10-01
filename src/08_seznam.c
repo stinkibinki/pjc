@@ -10,8 +10,10 @@
 typedef struct bes {
     char beseda[MAX];
     struct bes *nasl; // kazalec na naslednji element seznama
+    struct bes *nCrka; // kazalec na naslednjo crko e.g. a->b, b->c etc
 } beseda;
 
+typedef int fIsci(beseda *, char *);
 
 void dodajU(beseda **b, beseda **z) {
     if (*z == NULL) { // ce je seznam prazen
@@ -34,7 +36,6 @@ void dodajU(beseda **b, beseda **z) {
                 t->nasl = *b;
             }
         }
-
     }
 }
 
@@ -60,8 +61,57 @@ int poisci(beseda *z, char *word) {
     return i;
 }
 
+int poisciHitreje(beseda *z, char *word) {
+    int i = 0;
+    beseda *t = z;
+    while (strcmp(word, t->beseda) != 0) {
+        if (word[0] > t->beseda[0]) {
+            t = t->nCrka;
+            i++;
+        } else {
+            if (t->nasl == NULL || word[0] < t->beseda[0]) return -1;
+            t = t->nasl;
+            i++;
+        }
+    }
+    return i;
+}
+
+int povprecnoIskanje(fIsci i, beseda *z) {
+    int vsota = 0;
+    int stBesed = 0;
+    beseda *t = z;
+    while (t->nasl != NULL) {
+        vsota += i(z, t->beseda);
+        stBesed++;
+        t = t->nasl;
+    }
+    vsota += poisci(z, t->beseda);
+    stBesed++;
+    return vsota/stBesed;
+}
+
+void dopolniSeznam(beseda *z) {
+    beseda *u = z; // zadnja unique crka
+    beseda *t = u->nasl;
+    while (t != NULL) {
+        if (u->beseda[0] < t->beseda[0]) {
+            u->nCrka = t;
+            u = t;
+        } else u->nCrka = NULL;
+        t = t->nasl;
+    }
+}
+
+void pocistiSeznam(beseda *z) {
+    while (z != NULL) {
+        free(z);
+        z = z->nasl;
+    }
+}
+
 int main(int argc, char *argv[]) {
-    FILE *f = fopen("../res/slovenija.txt", "r");
+    FILE *f = fopen("../res/besede.txt", "r");
 
     beseda *z = NULL;
     while (!feof(f)) {
@@ -72,7 +122,23 @@ int main(int argc, char *argv[]) {
         }
         dodajU(&b, &z);
     }
-    izpisi(z);
-    printf("%d\n", poisci(z, "bi"));
     fclose(f);
+    izpisi(z);
+    dopolniSeznam(z);
+    //printf("%d\n", poisci(z, "bir"));
+    //printf("povp iskanje: %d\n", povprecnoIskanje(z));
+
+    // while(1) {
+    //     char trb[MAX];
+    //     printf("vpisi iskano besedo:");
+    //     scanf("%s", trb);
+    //     printf("%d\n", poisci(z, trb));
+    //     printf("%d\n", poisciHitreje(z, trb));
+    // }
+
+    printf("PI1: %d\n", povprecnoIskanje(poisci, z));
+    printf("PI1: %d\n", povprecnoIskanje(poisciHitreje, z));
+
+    pocistiSeznam(z);
+
 }
