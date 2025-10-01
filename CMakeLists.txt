@@ -18,4 +18,5 @@ add_executable(code
         src/05_histogram.c
         src/06_sklad.c
         src/06_testSklada.c
-        src/07_imenik.c)
+        src/07_imenik.c
+        src/08_seznam.c)

@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main() {
-    printf("%d", strcmp("A", "B")); // if A > B -> false (-1)
+    printf("%d", strcmp("je", "je")); // if A > B -> false (-1)
 }
 
 // 01
